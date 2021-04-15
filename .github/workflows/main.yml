@@ -12,11 +12,6 @@ jobs:
     name: '🐧 Ubuntu 16.04'
     steps:
 
-    - name: '🧰 Checkout'
-      uses: actions/checkout@v2
-      with:
-        submodules: recursive
-
     - name: '⚙️ Cache Qt'
       id: cache-qt
       uses: actions/cache@v1
