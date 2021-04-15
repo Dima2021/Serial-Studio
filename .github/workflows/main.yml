@@ -40,9 +40,3 @@ jobs:
       run: |
           qmake ${{env.QMAKE_PROJECT}} CONFIG+=release PREFIX=/usr
           make -j8
-		  
-    - name: 'WhiteSource Unified Agent Scan'
-      run: |
-        curl -LJO https://github.com/whitesource/unified-agent-distribution/releases/latest/download/wss-unified-agent.jar
-        echo UA downloaded successfully
-        java -jar wss-unified-agent.jar -apikey c6ea57d9411e4226ad8948f25199ae0c6a4dfda311a948a692de1bc5fac994cb -product xxx -project yyy
