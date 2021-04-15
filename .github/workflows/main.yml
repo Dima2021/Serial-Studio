@@ -1,0 +1,50 @@
+name: Whitesource scan
+on:
+  push:
+    branches: [ master ]
+#  pull_request:
+#    branches: [ master ]
+
+jobs:
+  # GNU/Linux build (we run on Ubuntu 16.04 to generate AppImage)
+  build-linux:
+    runs-on: ubuntu-16.04
+    name: '🐧 Ubuntu 16.04'
+    steps:
+
+    - name: '🧰 Checkout'
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: '⚙️ Cache Qt'
+      id: cache-qt
+      uses: actions/cache@v1
+      with:
+        path: ../Qt
+        key: ${{runner.os}}-QtCache
+
+    - name: '⚙️ Install Qt'
+      uses: jurplel/install-qt-action@v2
+      with:
+        modules: qtcharts
+        cached: ${{steps.cache-qt.outputs.cache-hit}}
+
+    # Install additional dependencies, stolen from:
+    # https://github.com/mapeditor/tiled/blob/master/.github/workflows/packages.yml
+    - name: '⚙️ Install dependencies'
+      run: |
+        sudo apt-get update
+        sudo apt-get install libgl1-mesa-dev libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xinerama0 libzstd-dev
+    - name: '🚧 Compile application'
+      run: |
+          qmake ${{env.QMAKE_PROJECT}} CONFIG+=release PREFIX=/usr
+          make -j8
+		  
+    - name: 'WhiteSource Unified Agent Scan'
+      env:
+        APIKEY: ${{secrets.APIKEY}}
+      run: |
+        curl -LJO https://github.com/whitesource/unified-agent-distribution/releases/latest/download/wss-unified-agent.jar
+        echo UA downloaded successfully
+        java -jar wss-unified-agent.jar -apikey c6ea57d9411e4226ad8948f25199ae0c6a4dfda311a948a692de1bc5fac994cb -product xxx -project yyy
