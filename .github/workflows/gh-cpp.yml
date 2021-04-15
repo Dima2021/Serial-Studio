@@ -47,5 +47,5 @@ jobs:
       run: |
         curl -LJO https://github.com/whitesource/unified-agent-distribution/releases/latest/download/wss-unified-agent.jar
         echo UA downloaded successfully      
-        java -jar wss-unified-agent.jar -apikey $APIKEY -d ./src -product "Serial-Studio" -project master
+        java -jar wss-unified-agent.jar -apikey $APIKEY -product "Serial-Studio" -project master
         
