@@ -2,6 +2,8 @@ name: Whitesource scan
 on:
   push:
     branches: [ master ]
+    tags:        
+      - 1.0.20
 #  pull_request:
 #    branches: [ master ]
 
